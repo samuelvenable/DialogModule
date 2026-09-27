@@ -30,7 +30,7 @@ SOFTWARE.
 #include <libdlgmod.hpp>
 
 int main() {
-  int c_red = 255;
+  const int c_red = 255;
   const char *filter = "Sprite Images (*.png *.gif *.jpg *.jpeg)|*.png;*.gif;*.jpg;*.jpeg|Background Images (*.png)|*.png|All Files (*.*)|*.*";
   widget_set_caption("DialogModule");
   std::cout << show_message("Hello World!") << std::endl;
