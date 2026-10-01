@@ -30,6 +30,7 @@ SOFTWARE.
 #include <libdlgmod/libdlgmod.h>
 
 int main() {
+  widget_set_icon("");
   const int c_red = 255;
   const char *filter = "Sprite Images (*.png *.gif *.jpg *.jpeg)|*.png;*.gif;*.jpg;*.jpeg|Background Images (*.png)|*.png|All Files (*.*)|*.*";
   widget_set_caption("DialogModule");
