@@ -1,6 +1,8 @@
 cd "${0%/*}/libdlgmod" && make && cd "..";
 if [ "$OS" = "Windows_NT" ]; then
-  g++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" -o "DialogModule.exe" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -I"libdlgmod" -std=c++17 -static-libgcc -static-libstdc++ -static -lntdll -lgdiplus -lcomctl32 -lshlwapi -lcomdlg32 -lole32 -loleaut32 -luuid -fPIC;
+  windres "IDI_APPICON.rc" -o "IDI_APPICON.o";
+  g++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" "IDI_APPICON.o" -o "DialogModule.exe" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -I"libdlgmod" -std=c++17 -static-libgcc -static-libstdc++ -static -lntdll -lgdiplus -lcomctl32 -lshlwapi -lcomdlg32 -lole32 -loleaut32 -luuid -mconsole -fPIC;
+  rm -fr "IDI_APPICON.o";
 elif [ `uname` = "Darwin" ]; then
   clang++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" -o "DialogModule" -I"libdlgmod" -std=c++17 -ObjC++ -framework AppKit -framework UniformTypeIdentifiers -mmacos-version-min=11.0 -arch arm64 -arch x86_64 -fPIC;
 elif [ `uname` = "Linux" ]; then
