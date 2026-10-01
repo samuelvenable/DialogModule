@@ -27,7 +27,7 @@ SOFTWARE.
 #include <iostream>
 #include <string>
 
-#include <libdlgmod.hpp>
+#include <libdlgmod/libdlgmod.h>
 
 int main() {
   const int c_red = 255;
