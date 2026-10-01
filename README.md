@@ -1,1 +1,2 @@
-# DialogModule Test Program
+# DialogModule
+Test program for libdlgmod library.
