@@ -24,15 +24,28 @@ SOFTWARE.
 
 */
 
+#include <system_error>
+#include <filesystem>
+
 #include <iostream>
+#include <fstream>
+
 #include <string>
+#include <vector>
 
 #include <libdlgmod/libdlgmod.h>
 
+#include "IDI_APPICON.h"
+
 int main() {
-  widget_set_icon("");
+  std::error_code ec;
   const int c_red = 255;
   const char *filter = "Sprite Images (*.png *.gif *.jpg *.jpeg)|*.png;*.gif;*.jpg;*.jpeg|Background Images (*.png)|*.png|All Files (*.*)|*.*";
+  std::filesystem::path icon = std::filesystem::temp_directory_path(ec) / "IDI_APPICON.png";
+  std::ofstream out(icon.string().c_str(), std::ios::binary);
+  out.write((const char *)IDI_APPICON_png, IDI_APPICON_png_len);
+  out.close();
+  widget_set_icon(icon.string().c_str());
   widget_set_caption("DialogModule");
   std::cout << show_message("Hello World!") << std::endl;
   std::cout << show_message_cancelable("Hello World!") << std::endl;
