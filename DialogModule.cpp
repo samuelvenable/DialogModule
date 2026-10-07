@@ -68,14 +68,13 @@ int main() {
   std::ofstream out(icon.string().c_str(), std::ios::binary);
   out.write((const char *)IDI_APPICON_png, IDI_APPICON_png_len);
   out.close();
-  WNDCLASSEXW wc = { sizeof(WNDCLASSEXW) };
+  WNDCLASSEXA wc = { sizeof(WNDCLASSEXA) };
   wc.lpfnWndProc = DefWindowProc;
-  wc.lpszClassName = L"DialogModule";
-  wc.hInstance = GetModuleHandleW(nullptr);
+  wc.lpszClassName = "DialogModule";
+  wc.hInstance = GetModuleHandleA(nullptr);
   wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
   RegisterClassExW(&wc);
-  static const wchar_t *title = L"DialogModule";
-  HWND window = CreateWindowExW(0, wc.lpszClassName, title, WS_OVERLAPPEDWINDOW,
+  HWND window = CreateWindowExA(0, wc.lpszClassName, wc.lpszClassName, WS_OVERLAPPEDWINDOW,
   0, 0, 640, 480, nullptr, nullptr, nullptr, nullptr);
   HICON hIcon = nullptr;
   ULONG_PTR gdiplusToken;
@@ -83,7 +82,7 @@ int main() {
   Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, nullptr);
   Gdiplus::Bitmap *png = Gdiplus::Bitmap::FromFile(icon.wstring().c_str());
   png->GetHICON(&hIcon);
-  PostMessage(window, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
+  PostMessageW(window, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
   delete png;
   RECT rc = { 0, 0, 640, 480 };
   DWORD dwStyle = GetWindowLongPtr(window, GWL_STYLE);
