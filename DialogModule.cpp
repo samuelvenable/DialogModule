@@ -40,7 +40,7 @@ SOFTWARE.
 #include "IDI_APPICON.h"
 #elif (defined(__APPLE__) && defined(__MACH__) && !defined(PROCESS_XQUARTZ_IMPL))
 #include <AppKit/AppKit.h>
-#include "IDI_APPICON_FULL.h"
+#include "IDI_APPICON_MAC.h"
 #elif ((defined(__linux__) && !defined(__ANDROID__)) || (defined(__FreeBSD__) || defined(__DragonFly__) || defined(__NetBSD__) || defined(__OpenBSD__)) || defined(__sun) || defined(PROCESS_XQUARTZ_IMPL))
 #include <X11/Xlib.h>
 #include "IDI_APPICON.h"
@@ -93,7 +93,7 @@ int main() {
   std::error_code ec;
   std::filesystem::path icon = std::filesystem::temp_directory_path(ec) / "IDI_APPICON.png";
   std::ofstream out(icon.string().c_str(), std::ios::binary);
-  out.write((const char *)IDI_APPICON_FULL_png, IDI_APPICON_FULL_png_len);
+  out.write((const char *)IDI_APPICON_MAC_png, IDI_APPICON_MAC_png_len);
   out.close();
   NSRect frame = NSMakeRect(0, 0, 640, 480);
   NSWindowStyleMask styles = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable;
