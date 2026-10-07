@@ -38,6 +38,7 @@ SOFTWARE.
 #if (defined(_WIN32) || defined(_WIN64))
 #include <windows.h>
 #include "IDI_APPICON.h"
+#define IDI_APPICON 1000
 #elif (defined(__APPLE__) && defined(__MACH__) && !defined(PROCESS_XQUARTZ_IMPL))
 #include <AppKit/AppKit.h>
 #include "IDI_APPICON_MAC.h"
