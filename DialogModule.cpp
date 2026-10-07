@@ -37,8 +37,8 @@ SOFTWARE.
 
 #if (defined(_WIN32) || defined(_WIN64))
 #include <windows.h>
+#include <gdiplus.h>
 #include "IDI_APPICON.h"
-#define IDI_APPICON 1000
 #elif (defined(__APPLE__) && defined(__MACH__) && !defined(PROCESS_XQUARTZ_IMPL))
 #include <AppKit/AppKit.h>
 #include "IDI_APPICON_MAC.h"
@@ -73,15 +73,18 @@ int main() {
   wc.lpszClassName = L"DialogModule";
   wc.hInstance = GetModuleHandleW(nullptr);
   wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
-  wc.hIcon = LoadIcon(nullptr, IDI_APPICON);
-  wc.hIconSm = LoadIcon(nullptr, IDI_APPICON);
   RegisterClassExW(&wc);
   static const wchar_t *title = L"DialogModule;
   HWND window = CreateWindowExW(0, wc.lpszClassName, title, WS_OVERLAPPEDWINDOW,
   0, 0, 640, 480, nullptr, nullptr, nullptr, nullptr);
-  HICON hicon = LoadIcon(GetModuleHandleW(nullptr), MAKEINTRESOURCE(0));
-  if (!hicon) { hicon = LoadIcon(nullptr, IDI_APPLICATION); }
-  PostMessage(window, WM_SETICON, ICON_SMALL, (LPARAM)hicon);
+  HICON hIcon = nullptr;
+  ULONG_PTR gdiplusToken;
+  Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+  Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, nullptr);
+  Bitmap *png = Bitmap::FromFile(icon.wstring().c_str());
+  png->GetHICON(&hIcon);
+  PostMessage(dlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
+  delete png;
   RECT rc = { 0, 0, 640, 480 };
   DWORD dwStyle = GetWindowLongPtr(window, GWL_STYLE);
   DWORD dwExStyle = GetWindowLongPtr(window, GWL_EXSTYLE);
