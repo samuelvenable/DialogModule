@@ -127,6 +127,9 @@ int main() {
   XStoreName(display, window, "DialogModule");
   XSelectInput(display, window, ExposureMask | KeyPressMask);
   XMapWindow(display, window);
+  XEvent event;
+  while (true) {
+  XNextEvent(display, &event);
   #endif
   widget_set_owner(std::to_string((unsigned long long)window).c_str());
   widget_set_icon(icon.string().c_str());
@@ -187,6 +190,7 @@ int main() {
   #elif (defined(__APPLE__) && defined(__MACH__) && !defined(PROCESS_XQUARTZ_IMPL))
   [window release];
   #elif ((defined(__linux__) && !defined(__ANDROID__)) || (defined(__FreeBSD__) || defined(__DragonFly__) || defined(__NetBSD__) || defined(__OpenBSD__)) || defined(__sun) || defined(PROCESS_XQUARTZ_IMPL))
+  }
   XDestroyWindow(display, window);
   XCloseDisplay(display);
   #endif
