@@ -5,7 +5,7 @@ if [ "$OS" = "Windows_NT" ]; then
   g++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" "IDI_APPICON.o" -o "DialogModule.exe" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -I"libdlgmod" -std=c++17 -static-libgcc -static-libstdc++ -static -lntdll -lgdiplus -lcomctl32 -lshlwapi -lcomdlg32 -lole32 -loleaut32 -luuid -mconsole -fPIC;
   rm -fr "IDI_APPICON.o";
 elif [ `uname` = "Darwin" ]; then
-  xxd -i "IDI_APPICON_FULL.png" > "IDI_APPICON_FULL.h";
+  xxd -i "IDI_APPICON_MAC.png" > "IDI_APPICON_MAC.h";
   mkdir -p "DialogModule.app/Contents/MacOS";
   clang++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" -o "DialogModule.app/Contents/MacOS/DialogModule" -I"libdlgmod" -std=c++17 -ObjC++ -framework AppKit -framework UniformTypeIdentifiers -mmacos-version-min=11.0 -arch arm64 -arch x86_64 -fPIC;
 elif [ `uname` = "Linux" ]; then
