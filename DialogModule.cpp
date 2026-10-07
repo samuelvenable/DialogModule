@@ -70,7 +70,7 @@ int main() {
   WNDCLASSEXW wc = { sizeof(WNDCLASSEXW) };
   wc.lpszClassName = L"DialogModule";
   wc.hInstance = GetModuleHandleW(nullptr);
-  wc.hbrBackground = CreateSolidBrush(RGB(255, 255, 255));
+  wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
   RegisterClassExW(&wc);
   HWND window = CreateWindowExW(0, wc.lpszClassName, L"DialogModule", WS_OVERLAPPEDWINDOW,
   0, 0, 640, 480, nullptr, nullptr, nullptr, nullptr);
