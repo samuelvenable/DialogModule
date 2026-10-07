@@ -73,7 +73,7 @@ int main() {
   wc.lpszClassName = "DialogModule";
   wc.hInstance = GetModuleHandleA(nullptr);
   wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
-  RegisterClassExW(&wc);
+  RegisterClassExA(&wc);
   HWND window = CreateWindowExA(0, wc.lpszClassName, wc.lpszClassName, WS_OVERLAPPEDWINDOW,
   0, 0, 640, 480, nullptr, nullptr, nullptr, nullptr);
   HICON hIcon = nullptr;
