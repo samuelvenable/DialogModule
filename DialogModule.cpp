@@ -81,7 +81,7 @@ int main() {
   ULONG_PTR gdiplusToken;
   Gdiplus::GdiplusStartupInput gdiplusStartupInput;
   Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, nullptr);
-  Bitmap *png = Bitmap::FromFile(icon.wstring().c_str());
+  Gdiplus::Bitmap *png = Gdiplus::Bitmap::FromFile(icon.wstring().c_str());
   png->GetHICON(&hIcon);
   PostMessage(dlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
   delete png;
