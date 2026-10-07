@@ -83,6 +83,11 @@ int main() {
   RegisterClassExW(&wc);
   HWND window = CreateWindowExW(0, wc.lpszClassName, L"DialogModule", WS_OVERLAPPEDWINDOW,
   0, 0, 640, 480, nullptr, nullptr, nullptr, nullptr);
+  HICON icon = (HICON)SendMessageW(hwnd, WM_GETICON, ICON_SMALL, 0);
+  if (!icon) { icon = (HICON)GetClassLongPtrW(hwnd, GCLP_HICONSM); }
+  if (!icon) { icon = LoadIcon(GetModuleHandleW(nullptr), MAKEINTRESOURCE(0)); }
+  if (!icon) { icon = LoadIcon(nullptr, IDI_APPLICATION); }
+  PostMessage(window, WM_SETICON, ICON_SMALL, (LPARAM)icon);
   RECT rc = { 0, 0, 640, 480 };
   DWORD dwStyle = GetWindowLongPtr(window, GWL_STYLE);
   DWORD dwExStyle = GetWindowLongPtr(window, GWL_EXSTYLE);
