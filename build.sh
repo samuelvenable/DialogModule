@@ -2,7 +2,7 @@ cd "${0%/*}/libdlgmod" && make && cd "..";
 if [ "$OS" = "Windows_NT" ]; then
   xxd -i "IDI_APPICON.png" > "IDI_APPICON.h";
   windres "IDI_APPICON.rc" -o "IDI_APPICON.o";
-  g++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" "IDI_APPICON.o" -o "DialogModule.exe" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -I"libdlgmod" -std=c++17 -static-libgcc -static-libstdc++ -static -lntdll -lgdiplus -lcomctl32 -lshlwapi -lcomdlg32 -lole32 -loleaut32 -luuid -mconsole -fPIC;
+  g++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" "IDI_APPICON.o" -o "DialogModule.exe" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -I"libdlgmod" -std=c++17 -static-libgcc -static-libstdc++ -static -lntdll -lgdi32 -lgdiplus -lcomctl32 -lshlwapi -lcomdlg32 -lole32 -loleaut32 -luuid -mconsole -fPIC;
   rm -fr "IDI_APPICON.o";
 elif [ `uname` = "Darwin" ]; then
   xxd -i "IDI_APPICON_MAC.png" > "IDI_APPICON_MAC.h";
