@@ -83,7 +83,7 @@ int main() {
   Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, nullptr);
   Gdiplus::Bitmap *png = Gdiplus::Bitmap::FromFile(icon.wstring().c_str());
   png->GetHICON(&hIcon);
-  PostMessage(dlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
+  PostMessage(window, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
   delete png;
   RECT rc = { 0, 0, 640, 480 };
   DWORD dwStyle = GetWindowLongPtr(window, GWL_STYLE);
