@@ -123,7 +123,7 @@ int main() {
   Display *display = XOpenDisplay(nullptr);
   int screen = DefaultScreen(display);
   Window window = XCreateSimpleWindow(display, RootWindow(display, screen), 
-  0, 0, 550, 32 * 4, 1, BlackPixel(display, screen), WhitePixel(display, screen));
+  0, 0, 640, 480, 1, BlackPixel(display, screen), WhitePixel(display, screen));
   XStoreName(display, window, "DialogModule");
   XSelectInput(display, window, ExposureMask | KeyPressMask);
   XMapWindow(display, window);
