@@ -38,6 +38,14 @@ SOFTWARE.
 #if (defined(_WIN32) || defined(_WIN64))
 #include <windows.h>
 #include "IDI_APPICON.h"
+LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+  switch (msg) {
+   case WM_DESTROY:
+    return 0;
+   default:
+    return DefWindowProc(hWnd, msg, wParam, lParam);
+  }
+}
 #elif (defined(__APPLE__) && defined(__MACH__) && !defined(PROCESS_XQUARTZ_IMPL))
 #include <AppKit/AppKit.h>
 #include "IDI_APPICON_MAC.h"
