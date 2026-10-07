@@ -68,6 +68,7 @@ int main() {
   out.write((const char *)IDI_APPICON_png, IDI_APPICON_png_len);
   out.close();
   WNDCLASSEXW wc = { sizeof(WNDCLASSEXW) };
+  wc.lpfnWndProc = DefWindowProc;
   wc.lpszClassName = L"DialogModule";
   wc.hInstance = GetModuleHandleW(nullptr);
   wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
