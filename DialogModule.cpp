@@ -74,7 +74,7 @@ int main() {
   wc.hInstance = GetModuleHandleW(nullptr);
   wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
   RegisterClassExW(&wc);
-  static const wchar_t *title = L"DialogModule;
+  static const wchar_t *title = L"DialogModule";
   HWND window = CreateWindowExW(0, wc.lpszClassName, title, WS_OVERLAPPEDWINDOW,
   0, 0, 640, 480, nullptr, nullptr, nullptr, nullptr);
   HICON hIcon = nullptr;
