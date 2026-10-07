@@ -6,7 +6,8 @@ if [ "$OS" = "Windows_NT" ]; then
   rm -fr "IDI_APPICON.o";
 elif [ `uname` = "Darwin" ]; then
   xxd -i "IDI_APPICON_FULL.png" > "IDI_APPICON_FULL.h";
-  clang++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" -o "DialogModule" -I"libdlgmod" -std=c++17 -ObjC++ -framework AppKit -framework UniformTypeIdentifiers -mmacos-version-min=11.0 -arch arm64 -arch x86_64 -fPIC;
+  mkdir -p "DialogModule.app/Contents/MacOS";
+  clang++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" -o "DialogModule.app/Contents/MacOS/DialogModule" -I"libdlgmod" -std=c++17 -ObjC++ -framework AppKit -framework UniformTypeIdentifiers -mmacos-version-min=11.0 -arch arm64 -arch x86_64 -fPIC;
 elif [ `uname` = "Linux" ]; then
   xxd -i "IDI_APPICON.png" > "IDI_APPICON.h";
   g++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" -o "DialogModule" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -DUSE_XDG_DESKTOP_PORTAL -I"libdlgmod" -std=c++17 -static-libgcc -static-libstdc++ `pkg-config --cflags --libs x11` `pkg-config --cflags --libs dbus-1` -lpthread -fPIC;
