@@ -190,7 +190,7 @@ int main() {
   #elif (defined(__APPLE__) && defined(__MACH__) && !defined(PROCESS_XQUARTZ_IMPL))
   [window release];
   #elif ((defined(__linux__) && !defined(__ANDROID__)) || (defined(__FreeBSD__) || defined(__DragonFly__) || defined(__NetBSD__) || defined(__OpenBSD__)) || defined(__sun) || defined(PROCESS_XQUARTZ_IMPL))
-    break;
+  break;
   }
   XDestroyWindow(display, window);
   XCloseDisplay(display);
