@@ -75,7 +75,8 @@ int main() {
   wc.hIcon = LoadIcon(nullptr, IDI_APPICON);
   wc.hIconSm = LoadIcon(nullptr, IDI_APPICON);
   RegisterClassExW(&wc);
-  HWND window = CreateWindowExW(0, wc.lpszClassName, L"DialogModule", WS_OVERLAPPEDWINDOW,
+  static const wchar_t *title = L"DialogModule;
+  HWND window = CreateWindowExW(0, wc.lpszClassName, title, WS_OVERLAPPEDWINDOW,
   0, 0, 640, 480, nullptr, nullptr, nullptr, nullptr);
   HICON hicon = LoadIcon(GetModuleHandleW(nullptr), MAKEINTRESOURCE(0));
   if (!hicon) { hicon = LoadIcon(nullptr, IDI_APPLICATION); }
