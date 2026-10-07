@@ -38,14 +38,6 @@ SOFTWARE.
 #if (defined(_WIN32) || defined(_WIN64))
 #include <windows.h>
 #include "IDI_APPICON.h"
-LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-  switch (msg) {
-   case WM_DESTROY:
-    return 0;
-   default:
-    return DefWindowProc(hWnd, msg, wParam, lParam);
-  }
-}
 #elif (defined(__APPLE__) && defined(__MACH__) && !defined(PROCESS_XQUARTZ_IMPL))
 #include <AppKit/AppKit.h>
 #include "IDI_APPICON_MAC.h"
@@ -76,10 +68,12 @@ int main() {
   out.write((const char *)IDI_APPICON_png, IDI_APPICON_png_len);
   out.close();
   WNDCLASSEXW wc = { sizeof(WNDCLASSEXW) };
-  wc.lpfnWndProc = WndProc;
+  wc.lpfnWndProc = DefWindowProc;
   wc.lpszClassName = L"DialogModule";
   wc.hInstance = GetModuleHandleW(nullptr);
   wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
+  wc.hIcon = LoadIcon(nullptr, IDI_APPICON);
+  wc.hIconSm = LoadIcon(nullptr, IDI_APPICON);
   RegisterClassExW(&wc);
   HWND window = CreateWindowExW(0, wc.lpszClassName, L"DialogModule", WS_OVERLAPPEDWINDOW,
   0, 0, 640, 480, nullptr, nullptr, nullptr, nullptr);
