@@ -43,7 +43,9 @@ SOFTWARE.
 #include <AppKit/AppKit.h>
 #include "IDI_APPICON_MAC.h"
 #elif ((defined(__linux__) && !defined(__ANDROID__)) || (defined(__FreeBSD__) || defined(__DragonFly__) || defined(__NetBSD__) || defined(__OpenBSD__)) || defined(__sun) || defined(PROCESS_XQUARTZ_IMPL))
+#include <libdlgmod/general/lodepng.h>
 #include <X11/Xlib.h>
+#include <X11/Xatom.h>
 #include "IDI_APPICON.h"
 #endif
 
@@ -120,11 +122,52 @@ int main() {
   std::ofstream out(icon.string().c_str(), std::ios::binary);
   out.write((const char *)IDI_APPICON_png, IDI_APPICON_png_len);
   out.close();
+  auto XSetIcon = [](Display *display, Window window, const char *icon) {
+    auto nlpo2dc = [](unsigned x) {
+      x--;
+      x |= x >> 1;
+      x |= x >> 2;
+      x |= x >> 4;
+      x |= x >> 8;
+      return (unsigned)(x | (x >> 16));
+    };
+    XSynchronize(display, true);
+    Atom property = XInternAtom(display, "_NET_WM_ICON", true);
+    unsigned char *data = nullptr;
+    unsigned pngwidth, pngheight;
+    unsigned error = lodepng_decode32_file(&data, &pngwidth, &pngheight, icon);
+    unsigned widfull = nlpo2dc(pngwidth) + 1,
+    hgtfull = nlpo2dc(pngheight) + 1, ih, iw;
+    const int bitmap_size = widfull * hgtfull * 4;
+    unsigned char *bitmap = new unsigned char[bitmap_size]();
+    unsigned i = 0;
+    unsigned elem_numb = 2 + pngwidth * pngheight;
+    unsigned long *result = new unsigned long[elem_numb]();
+    result[i++] = pngwidth;
+    result[i++] = pngheight;
+    for (ih = 0; ih < pngheight; ih++) {
+      unsigned tmp = ih * widfull * 4;
+      for (iw = 0; iw < pngwidth; iw++) {
+        bitmap[tmp + 0] = data[4 * pngwidth * ih + iw * 4 + 2];
+        bitmap[tmp + 1] = data[4 * pngwidth * ih + iw * 4 + 1];
+        bitmap[tmp + 2] = data[4 * pngwidth * ih + iw * 4 + 0];
+        bitmap[tmp + 3] = data[4 * pngwidth * ih + iw * 4 + 3];
+        result[i++] = bitmap[tmp + 0] | (bitmap[tmp + 1] << 8) | (bitmap[tmp + 2] << 16) | (bitmap[tmp + 3] << 24);
+        tmp += 4;
+      }
+    }
+    XChangeProperty(display, window, property, XA_CARDINAL, 32, PropModeReplace, (unsigned char *)result, elem_numb);
+    XFlush(display);
+    delete[] result;
+    delete[] bitmap;
+    delete[] data;
+  };
   Display *display = XOpenDisplay(nullptr);
   int screen = DefaultScreen(display);
   Window window = XCreateSimpleWindow(display, RootWindow(display, screen), 
   0, 0, 640, 480, 1, BlackPixel(display, screen), WhitePixel(display, screen));
   XStoreName(display, window, "DialogModule");
+  XSetIcon(display, window, icon.string().c_str());
   XSelectInput(display, window, ExposureMask | KeyPressMask);
   XMapWindow(display, window);
   XEvent event;
