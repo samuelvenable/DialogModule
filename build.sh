@@ -11,21 +11,21 @@ elif [ `uname` = "Darwin" ]; then
   ln -s "DialogModule.app/Contents/MacOS/DialogModule" "DialogModule";
 elif [ `uname` = "Linux" ]; then
   xxd -i "IDI_APPICON.png" > "IDI_APPICON.h";
-  g++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" -o "DialogModule" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -DUSE_XDG_DESKTOP_PORTAL -I"libdlgmod" -std=c++17 -static-libgcc -static-libstdc++ `pkg-config --cflags --libs x11` `pkg-config --cflags --libs dbus-1` -lpthread -fPIC;
+  g++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" -o "DialogModule" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -DUSE_XDG_DESKTOP_PORTAL -I"libdlgmod" -std=c++17 -static-libgcc -static-libstdc++ `pkg-config --cflags --libs x11 xrandr xinerama` `pkg-config --cflags --libs dbus-1` -lpthread -fPIC;
 elif [ `uname` = "FreeBSD" ]; then
   xxd -i "IDI_APPICON.png" > "IDI_APPICON.h";
-  clang++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" -o "DialogModule" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -I"libdlgmod" -std=c++17 `pkg-config --cflags --libs x11` -lkvm -lc -lpthread -fPIC;
+  clang++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" -o "DialogModule" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -I"libdlgmod" -std=c++17 `pkg-config --cflags --libs x11 xrandr xinerama` -lkvm -lc -lpthread -fPIC;
 elif [ `uname` = "DragonFly" ]; then
   xxd -i "IDI_APPICON.png" > "IDI_APPICON.h";
-  g++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" -o "DialogModule" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -I"libdlgmod" -std=c++17 -static-libgcc `pkg-config --cflags --libs x11` -lkvm -lc -lpthread -fPIC;
+  g++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" -o "DialogModule" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -I"libdlgmod" -std=c++17 -static-libgcc `pkg-config --cflags --libs x11 xrandr xinerama` -lkvm -lc -lpthread -fPIC;
 elif [ `uname` = "NetBSD" ]; then
   xxd -i "IDI_APPICON.png" > "IDI_APPICON.h";
-  g++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" -o "DialogModule" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -I"libdlgmod" -std=c++17 -static-libgcc `pkg-config --cflags --libs x11` -I/usr/X11R7/include -Wl,-rpath,/usr/X11R7/lib -L/usr/X11R7/lib -lkvm -lc -lpthread -fPIC;
+  g++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" -o "DialogModule" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -I"libdlgmod" -std=c++17 -static-libgcc `pkg-config --cflags --libs x11 xrandr xinerama` -I/usr/x11 xrandr xineramaR7/include -Wl,-rpath,/usr/x11 xrandr xineramaR7/lib -L/usr/x11 xrandr xineramaR7/lib -lkvm -lc -lpthread -fPIC;
 elif [ `uname` = "OpenBSD" ]; then
   xxd -i "IDI_APPICON.png" > "IDI_APPICON.h";
-  clang++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" -o "DialogModule" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -I"libdlgmod" -std=c++17 `pkg-config --cflags --libs x11` -lkvm -lc -lpthread -fPIC;
+  clang++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" -o "DialogModule" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -I"libdlgmod" -std=c++17 `pkg-config --cflags --libs x11 xrandr xinerama` -lkvm -lc -lpthread -fPIC;
 elif [ `uname` = "SunOS" ]; then
   xxd -i "IDI_APPICON.png" > "IDI_APPICON.h";
   export PKG_CONFIG_PATH=/usr/lib/64/pkgconfig;
-  g++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" -o "DialogModule" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -I"libdlgmod" -std=c++17 -static-libgcc `pkg-config --cflags --libs x11` -lkvm -lc -lproc -lpthread -fPIC;
+  g++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" -o "DialogModule" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -I"libdlgmod" -std=c++17 -static-libgcc `pkg-config --cflags --libs x11 xrandr xinerama` -lkvm -lc -lproc -lpthread -fPIC;
 fi;

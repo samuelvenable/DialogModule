@@ -46,7 +46,79 @@ SOFTWARE.
 #include <libdlgmod/general/lodepng.h>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
+#include <X11/Xutil.h>
+#include <X11/extensions/Xrandr.h>
+#include <X11/extensions/Xinerama.h>
 #include "IDI_APPICON.h"
+static int displayX            = -1;
+static int displayY            = -1;
+static int displayWidth        = -1;
+static int displayHeight       = -1;
+static int displayXGetter      = -1;
+static int displayYGetter      = -1;
+static int displayWidthGetter  = -1;
+static int displayHeightGetter = -1;
+static void display_get_position(bool i, int *result) {
+  Display *display = XOpenDisplay(NULL);
+  *result = 0; Rotation original_rotation; 
+  Window root = XDefaultRootWindow(display);
+  XRRScreenConfiguration *conf = XRRGetScreenInfo(display, root);
+  SizeID original_size_id = XRRConfigCurrentConfiguration(conf, &original_rotation);
+  if (XineramaIsActive(display)) {
+    int m = 0; XineramaScreenInfo *xrrp = XineramaQueryScreens(display, &m);
+    if (!i) *result = xrrp[original_size_id].x_org;
+    else if (i) *result = xrrp[original_size_id].y_org;
+    XFree(xrrp);
+  }
+  XCloseDisplay(display);
+}
+static void display_get_size(bool i, int *result) {
+  Display *display = XOpenDisplay(NULL);
+  *result = 0; int num_sizes; Rotation original_rotation; 
+  Window root = XDefaultRootWindow(display);
+  int screen = XDefaultScreen(display);
+  XRRScreenConfiguration *conf = XRRGetScreenInfo(display, root);
+  SizeID original_size_id = XRRConfigCurrentConfiguration(conf, &original_rotation);
+  if (XineramaIsActive(display)) {
+    XRRScreenSize *xrrs = XRRSizes(display, screen, &num_sizes);
+    if (!i) *result = xrrs[original_size_id].width;
+    else if (i) *result = xrrs[original_size_id].height;
+  } else if (!i) *result = XDisplayWidth(display, screen);
+  else if (i) *result = XDisplayHeight(display, screen);
+  XCloseDisplay(display);
+}
+static int display_get_x() {
+  if (displayXGetter == displayX && displayX != -1)
+    return displayXGetter;
+  display_get_position(false, &displayXGetter);
+  int result = displayXGetter;
+  displayX = result;
+  return result;
+}
+static int display_get_y() { 
+  if (displayYGetter == displayY && displayY != -1)
+    return displayYGetter;
+  display_get_position(true, &displayYGetter);
+  int result = displayYGetter;
+  displayY = result;
+  return result;
+}
+static int display_get_width() {
+  if (displayWidthGetter == displayWidth && displayWidth != -1) 
+    return displayWidthGetter;
+  display_get_size(false, &displayWidthGetter);
+  int result = displayWidthGetter;
+  displayWidth = result;
+  return result;
+}
+static int display_get_height() {
+  if (displayHeightGetter == displayHeight && displayHeight != -1)
+    return displayHeightGetter;
+  display_get_size(true, &displayHeightGetter);
+  int result = displayHeightGetter;
+  displayHeight = result;
+  return result;
+}
 #endif
 
 int main() {
@@ -164,8 +236,17 @@ int main() {
   };
   Display *display = XOpenDisplay(nullptr);
   int screen = DefaultScreen(display);
+  int xpos = display_get_x() + ((display_get_width() - 640) / 2);
+  int ypos = display_get_y() + ((display_get_height() - 480) / 2);
   Window window = XCreateSimpleWindow(display, RootWindow(display, screen), 
-  0, 0, 640, 480, 1, BlackPixel(display, screen), WhitePixel(display, screen));
+  xpos, ypos, 640, 480, 1, BlackPixel(display, screen), WhitePixel(display, screen));
+  XSizeHints *size_hints = XAllocSizeHints();
+  size_hints->flags &= ~PPosition;
+  size_hints->flags |= USPosition;
+  size_hints->x = xpos;
+  size_hints->y = ypos;
+  XSetWMNormalHints(display, window, size_hints);
+  XFree(size_hints);
   XStoreName(display, window, "DialogModule");
   XSetIcon(display, window, icon.string().c_str());
   XSelectInput(display, window, ExposureMask | KeyPressMask);
