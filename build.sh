@@ -20,7 +20,7 @@ elif [ `uname` = "DragonFly" ]; then
   g++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" -o "DialogModule" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -I"libdlgmod" -std=c++17 -static-libgcc `pkg-config --cflags --libs x11 xrandr xinerama` -lkvm -lc -lpthread -fPIC;
 elif [ `uname` = "NetBSD" ]; then
   xxd -i "IDI_APPICON.png" > "IDI_APPICON.h";
-  g++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" -o "DialogModule" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -I"libdlgmod" -std=c++17 -static-libgcc `pkg-config --cflags --libs x11 xrandr xinerama` -I/usr/x11 xrandr xineramaR7/include -Wl,-rpath,/usr/x11 xrandr xineramaR7/lib -L/usr/x11 xrandr xineramaR7/lib -lkvm -lc -lpthread -fPIC;
+  g++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" -o "DialogModule" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -I"libdlgmod" -std=c++17 -static-libgcc `pkg-config --cflags --libs x11 xrandr xinerama` -I/usr/X11R7/include -Wl,-rpath,/usr/X11R7/lib -L/usr/X11R7/lib -lkvm -lc -lpthread -fPIC;
 elif [ `uname` = "OpenBSD" ]; then
   xxd -i "IDI_APPICON.png" > "IDI_APPICON.h";
   clang++ "DialogModule.cpp" "libdlgmod/libdlgmod-cc.a" -o "DialogModule" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -I"libdlgmod" -std=c++17 `pkg-config --cflags --libs x11 xrandr xinerama` -lkvm -lc -lpthread -fPIC;
