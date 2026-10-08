@@ -273,6 +273,7 @@ int main() {
   widget_set_caption("Error");
   btn = show_error("Hello World!", false);
   widget_set_caption("DialogModule");
+  show_message(std::to_string(btn).c_str());
   str = get_string("Enter a string:", "Hello World!");
   if (!str.empty()) { show_message(str.c_str()); }
   str = get_password("Enter a string password:", "Hello World!");
