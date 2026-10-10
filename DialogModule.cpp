@@ -138,7 +138,7 @@ int main() {
   };
   #if (defined(_WIN32) || defined(_WIN64))
   std::error_code ec;
-  std::filesystem::path icon = std::filesystem::u8path(std::filesystem::temp_directory_path(ec) / "IDI_APPICON.png");
+  std::filesystem::path icon = std::filesystem::temp_directory_path(ec) / "IDI_APPICON.png";
   std::ofstream out(icon, std::ios::binary);
   out.write((const char *)IDI_APPICON_png, IDI_APPICON_png_len);
   out.close();
@@ -174,7 +174,7 @@ int main() {
   UpdateWindow(window);
   #elif (defined(__APPLE__) && defined(__MACH__) && !defined(PROCESS_XQUARTZ_IMPL))
   std::error_code ec;
-  std::filesystem::path icon = std::filesystem::u8path(std::filesystem::temp_directory_path(ec) / "IDI_APPICON.png");
+  std::filesystem::path icon = std::filesystem::temp_directory_path(ec) / "IDI_APPICON.png";
   std::ofstream out(icon, std::ios::binary);
   out.write((const char *)IDI_APPICON_MAC_png, IDI_APPICON_MAC_png_len);
   out.close();
@@ -192,7 +192,7 @@ int main() {
   [window makeKeyAndOrderFront:nullptr];
   #elif ((defined(__linux__) && !defined(__ANDROID__)) || (defined(__FreeBSD__) || defined(__DragonFly__) || defined(__NetBSD__) || defined(__OpenBSD__)) || defined(__sun) || defined(PROCESS_XQUARTZ_IMPL))
   std::error_code ec;
-  std::filesystem::path icon = std::filesystem::u8path(std::filesystem::temp_directory_path(ec) / "IDI_APPICON.png");
+  std::filesystem::path icon = std::filesystem::temp_directory_path(ec) / "IDI_APPICON.png";
   std::ofstream out(icon, std::ios::binary);
   out.write((const char *)IDI_APPICON_png, IDI_APPICON_png_len);
   out.close();
