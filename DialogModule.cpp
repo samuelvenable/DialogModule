@@ -138,8 +138,8 @@ int main() {
   };
   #if (defined(_WIN32) || defined(_WIN64))
   std::error_code ec;
-  std::filesystem::path icon = std::filesystem::temp_directory_path(ec) / "IDI_APPICON.png";
-  std::ofstream out(icon.string().c_str(), std::ios::binary);
+  std::filesystem::path icon = std::filesystem::u8path(std::filesystem::temp_directory_path(ec) / "IDI_APPICON.png");
+  std::ofstream out(icon, std::ios::binary);
   out.write((const char *)IDI_APPICON_png, IDI_APPICON_png_len);
   out.close();
   WNDCLASSEXA wc = { sizeof(WNDCLASSEXA) };
@@ -174,8 +174,8 @@ int main() {
   UpdateWindow(window);
   #elif (defined(__APPLE__) && defined(__MACH__) && !defined(PROCESS_XQUARTZ_IMPL))
   std::error_code ec;
-  std::filesystem::path icon = std::filesystem::temp_directory_path(ec) / "IDI_APPICON.png";
-  std::ofstream out(icon.string().c_str(), std::ios::binary);
+  std::filesystem::path icon = std::filesystem::u8path(std::filesystem::temp_directory_path(ec) / "IDI_APPICON.png");
+  std::ofstream out(icon, std::ios::binary);
   out.write((const char *)IDI_APPICON_MAC_png, IDI_APPICON_MAC_png_len);
   out.close();
   NSRect frame = NSMakeRect(0, 0, 640, 480);
@@ -190,8 +190,8 @@ int main() {
   [window makeKeyAndOrderFront:nullptr];
   #elif ((defined(__linux__) && !defined(__ANDROID__)) || (defined(__FreeBSD__) || defined(__DragonFly__) || defined(__NetBSD__) || defined(__OpenBSD__)) || defined(__sun) || defined(PROCESS_XQUARTZ_IMPL))
   std::error_code ec;
-  std::filesystem::path icon = std::filesystem::temp_directory_path(ec) / "IDI_APPICON.png";
-  std::ofstream out(icon.string().c_str(), std::ios::binary);
+  std::filesystem::path icon = std::filesystem::u8path(std::filesystem::temp_directory_path(ec) / "IDI_APPICON.png");
+  std::ofstream out(icon, std::ios::binary);
   out.write((const char *)IDI_APPICON_png, IDI_APPICON_png_len);
   out.close();
   auto XSetIcon = [](Display *display, Window window, const char *icon) {
@@ -248,7 +248,7 @@ int main() {
   XSetWMNormalHints(display, window, size_hints);
   XFree(size_hints);
   XStoreName(display, window, "DialogModule");
-  XSetIcon(display, window, icon.string().c_str());
+  XSetIcon(display, window, icon.u8string().c_str());
   XSelectInput(display, window, ExposureMask | KeyPressMask);
   XMapWindow(display, window);
   XEvent event;
@@ -256,7 +256,7 @@ int main() {
   XNextEvent(display, &event);
   #endif
   widget_set_owner(std::to_string((unsigned long long)window).c_str());
-  widget_set_icon(icon.string().c_str());
+  widget_set_icon(icon.u8string().c_str());
   widget_set_caption("DialogModule");
   btn = show_message("Hello World!");
   show_message(std::to_string(btn).c_str());
