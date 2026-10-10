@@ -158,6 +158,7 @@ int main() {
   png->GetHICON(&hIcon);
   PostMessageW(window, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
   delete png;
+  EnableMenuItem(GetSystemMenu(window, false), SC_CLOSE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
   RECT rc = { 0, 0, 640, 480 };
   DWORD dwStyle = GetWindowLongPtr(window, GWL_STYLE);
   DWORD dwExStyle = GetWindowLongPtr(window, GWL_EXSTYLE);
@@ -185,6 +186,7 @@ int main() {
   [window setBackgroundColor:[NSColor whiteColor]];
   NSImage *image = [[NSImage alloc] initWithContentsOfFile:[NSString stringWithUTF8String:icon.u8string().c_str()]];
   [NSApp setApplicationIconImage:image];
+  [[window standardWindowButton:NSWindowCloseButton] setEnabled:NO];
   NSRect screen = [[NSScreen mainScreen] frame];
   CGFloat xpos = NSMidX(screen) - (frame.size.width / 2);
   CGFloat ypos = NSMidY(screen) - (frame.size.height / 2);
