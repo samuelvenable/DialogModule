@@ -158,7 +158,7 @@ int main() {
   png->GetHICON(&hIcon);
   PostMessageW(window, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
   delete png;
-  EnableMenuItem(GetSystemMenu(window, false), SC_CLOSE, MF_BYCOMMAND | MF_DISABLED);
+  EnableMenuItem(GetSystemMenu(window, false), SC_CLOSE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
   RECT rc = { 0, 0, 640, 480 };
   DWORD dwStyle = GetWindowLongPtr(window, GWL_STYLE);
   DWORD dwExStyle = GetWindowLongPtr(window, GWL_EXSTYLE);
