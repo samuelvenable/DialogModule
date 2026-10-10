@@ -253,11 +253,17 @@ int main() {
   XFree(size_hints);
   XStoreName(display, window, "DialogModule");
   XSetIcon(display, window, icon.u8string().c_str());
+  Atom wm_protocols = XInternAtom(display, "WM_PROTOCOLS", false);
+  Atom wm_delete_window = XInternAtom(display, "WM_DELETE_WINDOW", false);
+  XSetWMProtocols(display, window, &wm_delete_window, 1);
   XSelectInput(display, window, ExposureMask | KeyPressMask);
   XMapWindow(display, window);
   XEvent event;
   while (true) {
   XNextEvent(display, &event);
+  if (event.type == ClientMessage &&
+  event.xclient.message_type == wm_protocols &&
+  event.xclient.data.l[0] == wm_delete_window) { }
   #endif
   widget_set_owner(std::to_string((unsigned long long)window).c_str());
   widget_set_icon(icon.u8string().c_str());
