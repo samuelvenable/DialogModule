@@ -186,7 +186,7 @@ int main() {
   [window setBackgroundColor:[NSColor whiteColor]];
   NSImage *image = [[NSImage alloc] initWithContentsOfFile:[NSString stringWithUTF8String:icon.u8string().c_str()]];
   [NSApp setApplicationIconImage:image];
-  [[window standardWindowButton:NSWindowCloseButton] setEnabled:NO];
+  [[window standardWindowButton:NSWindowCloseButton] setEnabled:false];
   NSRect screen = [[NSScreen mainScreen] frame];
   CGFloat xpos = NSMidX(screen) - (frame.size.width / 2);
   CGFloat ypos = NSMidY(screen) - (frame.size.height / 2);
