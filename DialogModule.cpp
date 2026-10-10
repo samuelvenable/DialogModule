@@ -183,6 +183,8 @@ int main() {
   NSWindow *window = [[NSWindow alloc] initWithContentRect:frame styleMask:styles backing:NSBackingStoreBuffered defer:false];
   [window setTitle:@"DialogModule"];
   [window setBackgroundColor:[NSColor whiteColor]];
+  NSImage *image = [[NSImage alloc] initWithContentsOfFile:[NSString stringWithUTF8String:icon.u8string().c_str()]];
+  [NSApp setApplicationIconImage:image];
   NSRect screen = [[NSScreen mainScreen] frame];
   CGFloat xpos = NSMidX(screen) - (frame.size.width / 2);
   CGFloat ypos = NSMidY(screen) - (frame.size.height / 2);
@@ -313,6 +315,7 @@ int main() {
   #if (defined(_WIN32) || defined(_WIN64))
   DestroyWindow(window);
   #elif (defined(__APPLE__) && defined(__MACH__) && !defined(PROCESS_XQUARTZ_IMPL))
+  [image release];
   [window release];
   #elif ((defined(__linux__) && !defined(__ANDROID__)) || (defined(__FreeBSD__) || defined(__DragonFly__) || defined(__NetBSD__) || defined(__OpenBSD__)) || defined(__sun) || defined(PROCESS_XQUARTZ_IMPL))
   break;
