@@ -250,6 +250,7 @@ int main() {
   size_hints->x = xpos;
   size_hints->y = ypos;
   XSetWMNormalHints(display, window, size_hints);
+  XMoveWindow(display, window, xpos, ypos);
   XFree(size_hints);
   XStoreName(display, window, "DialogModule");
   XSetIcon(display, window, icon.u8string().c_str());
