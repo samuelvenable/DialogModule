@@ -1,2 +1,3 @@
 build:
-	sh ./build.sh
+	@chmod u+x build.sh
+	./build.sh
