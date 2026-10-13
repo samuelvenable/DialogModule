@@ -230,8 +230,8 @@ int main() {
   XRRCrtcInfoRectangle rectangle = XRRCrtcInfoGetPrimaryMoniorRectangle(display);
   int xpos = 0, ypos = 0;
   if (rectangle.x != 0 || rectangle.y != 0 || rectangle.width != 0 || rectangle.height != 0) {
-    xpos = rectangle.x + ((rectangle.width - 550) / 2);
-    ypos = rectangle.y + ((rectangle.height - (32 * 4)) / 2);
+    xpos = rectangle.x + ((rectangle.width - 640) / 2);
+    ypos = rectangle.y + ((rectangle.height - 480) / 2);
   }
   Window window = XCreateSimpleWindow(display, RootWindow(display, screen), 
   xpos, ypos, 640, 480, 1, BlackPixel(display, screen), WhitePixel(display, screen));
