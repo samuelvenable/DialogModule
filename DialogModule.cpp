@@ -49,63 +49,6 @@ SOFTWARE.
 #include <X11/extensions/Xrandr.h>
 #include <libdlgmod/general/lodepng.h>
 #include "IDI_APPICON.h"
-typedef struct {
-  int x;
-  int y;
-  unsigned int width;
-  unsigned int height;
-} XRRCrtcInfoRectangle;
-XRRCrtcInfoRectangle XRRCrtcInfoGetPrimaryMoniorRectangle(Display *display) {
-  XRRCrtcInfoRectangle rectangle = { 0, 0, 0, 0 };
-  XRRScreenResources *screenRes = nullptr;
-  RROutput primaryOutput = 0;
-  XRROutputInfo *outputInfo = nullptr;
-  XRRCrtcInfo *crtcInfo = nullptr;
-  Window root = DefaultRootWindow(display);
-  int major = 0, minor = 0;
-  if (!XRRQueryVersion(display, &major, &minor)) {
-    goto fallback;
-  }
-  screenRes = XRRGetScreenResources(display, root);
-  if (!screenRes) {
-    goto fallback;
-  }
-  primaryOutput = XRRGetOutputPrimary(display, root);
-  if (primaryOutput == None) {
-    XRRFreeScreenResources(screenRes);
-    goto fallback;
-  }
-  outputInfo = XRRGetOutputInfo(display, screenRes, primaryOutput);
-  if (!outputInfo) {
-    XRRFreeScreenResources(screenRes);
-    goto fallback;
-  }
-  if (outputInfo->crtc == None) {
-    XRRFreeOutputInfo(outputInfo);
-    XRRFreeScreenResources(screenRes);
-    goto fallback;
-  }
-  crtcInfo = XRRGetCrtcInfo(display, screenRes, outputInfo->crtc);
-  if (!crtcInfo) {
-    XRRFreeOutputInfo(outputInfo);
-    XRRFreeScreenResources(screenRes);
-    goto fallback;
-  }
-  rectangle.x = crtcInfo->x;
-  rectangle.y = crtcInfo->y;
-  rectangle.width = crtcInfo->width;
-  rectangle.height = crtcInfo->height;
-  XRRFreeCrtcInfo(crtcInfo);
-  XRRFreeOutputInfo(outputInfo);
-  XRRFreeScreenResources(screenRes);
-  return rectangle;
-  fallback:
-  int screen = DefaultScreen(display);
-  rectangle.x = 0, rectangle.y = 0;
-  rectangle.width = DisplayWidth(display, screen);
-  rectangle.height = DisplayHeight(display, screen);
-  return rectangle;
-}
 #endif
 
 int main() {
@@ -225,16 +168,73 @@ int main() {
     delete[] bitmap;
     delete[] data;
   };
+  typedef struct {
+    int x;
+    int y;
+    unsigned int width;
+    unsigned int height;
+  } XRRCrtcInfoRectangle;
+  auto XRRCrtcInfoGetPrimaryMonitorRectangle = [](Display *display) {
+    XRRCrtcInfoRectangle rectangle = { 0, 0, 0, 0 };
+    XRRScreenResources *screenRes = nullptr;
+    RROutput primaryOutput = 0;
+    XRROutputInfo *outputInfo = nullptr;
+    XRRCrtcInfo *crtcInfo = nullptr;
+    Window root = XDefaultRootWindow(display);
+    int major = 0, minor = 0;
+    if (!XRRQueryVersion(display, &major, &minor)) {
+      goto fallback;
+    }
+    screenRes = XRRGetScreenResources(display, root);
+    if (!screenRes) {
+      goto fallback;
+    }
+    primaryOutput = XRRGetOutputPrimary(display, root);
+    if (primaryOutput == None) {
+      XRRFreeScreenResources(screenRes);
+      goto fallback;
+    }
+    outputInfo = XRRGetOutputInfo(display, screenRes, primaryOutput);
+    if (!outputInfo) {
+      XRRFreeScreenResources(screenRes);
+      goto fallback;
+    }
+    if (outputInfo->crtc == None) {
+      XRRFreeOutputInfo(outputInfo);
+      XRRFreeScreenResources(screenRes);
+      goto fallback;
+    }
+    crtcInfo = XRRGetCrtcInfo(display, screenRes, outputInfo->crtc);
+    if (!crtcInfo) {
+      XRRFreeOutputInfo(outputInfo);
+      XRRFreeScreenResources(screenRes);
+      goto fallback;
+    }
+    rectangle.x = crtcInfo->x;
+    rectangle.y = crtcInfo->y;
+    rectangle.width = crtcInfo->width;
+    rectangle.height = crtcInfo->height;
+    XRRFreeCrtcInfo(crtcInfo);
+    XRRFreeOutputInfo(outputInfo);
+    XRRFreeScreenResources(screenRes);
+    return rectangle;
+    fallback:
+    int screen = XDefaultScreen(display);
+    rectangle.x = 0, rectangle.y = 0;
+    rectangle.width = XDisplayWidth(display, screen);
+    rectangle.height = XDisplayHeight(display, screen);
+    return rectangle;
+  };
   Display *display = XOpenDisplay(nullptr);
-  int screen = DefaultScreen(display);
-  XRRCrtcInfoRectangle rectangle = XRRCrtcInfoGetPrimaryMoniorRectangle(display);
+  int screen = XDefaultScreen(display);
+  XRRCrtcInfoRectangle rectangle = XRRCrtcInfoGetPrimaryMonitorRectangle(display);
   int xpos = 0, ypos = 0;
   if (rectangle.x != 0 || rectangle.y != 0 || rectangle.width != 0 || rectangle.height != 0) {
     xpos = rectangle.x + ((rectangle.width - 640) / 2);
     ypos = rectangle.y + ((rectangle.height - 480) / 2);
   }
-  Window window = XCreateSimpleWindow(display, RootWindow(display, screen), 
-  xpos, ypos, 640, 480, 1, BlackPixel(display, screen), WhitePixel(display, screen));
+  Window window = XCreateSimpleWindow(display, XRootWindow(display, screen), 
+  xpos, ypos, 640, 480, 1, XBlackPixel(display, screen), XWhitePixel(display, screen));
   XSizeHints *size_hints = XAllocSizeHints();
   size_hints->flags &= ~PPosition;
   size_hints->flags |= USPosition;
